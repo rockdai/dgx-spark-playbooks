@@ -48,10 +48,6 @@ const config: Config = {
     navbar: {
       title: 'DGX Spark 中文手册',
       hideOnScroll: true,
-      logo: {
-        alt: 'DGX Spark 中文手册',
-        src: 'img/logo.svg',
-      },
       items: [
         {
           to: '/intro',

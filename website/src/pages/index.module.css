@@ -3,9 +3,9 @@
   overflow: hidden;
   padding: 7rem 0 5rem;
   background:
-    radial-gradient(circle at top left, rgba(118, 255, 76, 0.12), transparent 28%),
-    radial-gradient(circle at top right, rgba(118, 255, 76, 0.08), transparent 24%),
-    linear-gradient(180deg, #0b0f0c 0%, #111712 100%);
+    radial-gradient(circle at top left, rgba(118, 185, 0, 0.12), transparent 26%),
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.06), transparent 22%),
+    linear-gradient(180deg, #0b0b0c 0%, #121317 100%);
 }
 
 .heroInner {
@@ -16,10 +16,10 @@
   display: inline-block;
   margin-bottom: 1rem;
   padding: 0.35rem 0.7rem;
-  border: 1px solid rgba(118, 255, 76, 0.24);
+  border: 1px solid rgba(118, 185, 0, 0.3);
   border-radius: 999px;
-  color: #9fe870;
-  background: rgba(118, 255, 76, 0.08);
+  color: #b7ea63;
+  background: rgba(118, 185, 0, 0.1);
   font-size: 0.85rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -27,14 +27,14 @@
 
 .title {
   margin-bottom: 1rem;
-  color: #f5f7f2;
+  color: #ffffff;
   font-size: clamp(2.4rem, 6vw, 4.8rem);
   line-height: 1.02;
 }
 
 .subtitle {
   max-width: 760px;
-  color: rgba(245, 247, 242, 0.78);
+  color: rgba(229, 231, 235, 0.8);
   font-size: 1.08rem;
   line-height: 1.75;
 }
@@ -62,7 +62,7 @@
 
 .statValue {
   display: block;
-  color: #f5f7f2;
+  color: #ffffff;
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -70,7 +70,7 @@
 .statLabel {
   display: block;
   margin-top: 0.25rem;
-  color: rgba(245,247,242,0.66);
+  color: rgba(229,231,235,0.66);
   font-size: 0.92rem;
 }
 
@@ -81,7 +81,7 @@
   padding: 0.75rem 1.2rem;
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 0.75rem;
-  color: #f5f7f2;
+  color: #f3f4f6;
   text-decoration: none;
   background: rgba(255,255,255,0.04);
   transition: all 0.2s ease;
@@ -89,13 +89,13 @@
 
 .secondaryButton:hover {
   text-decoration: none;
-  border-color: rgba(118,255,76,0.32);
-  background: rgba(118,255,76,0.08);
-  color: #b5ff88;
+  border-color: rgba(118,185,0,0.3);
+  background: rgba(118,185,0,0.08);
+  color: #ffffff;
 }
 
 .main {
-  background: #0d120f;
+  background: #0b0b0c;
   padding-bottom: 4rem;
 }
 
@@ -106,13 +106,13 @@
 .sectionHeader h2,
 .panel h2,
 .noticeBox h2 {
-  color: #f5f7f2;
+  color: #ffffff;
 }
 
 .sectionHeader p,
 .panel p,
 .noticeBox p {
-  color: rgba(245, 247, 242, 0.72);
+  color: rgba(229, 231, 235, 0.74);
 }
 
 .cardGrid {
@@ -143,7 +143,8 @@
 .card:hover {
   text-decoration: none;
   transform: translateY(-2px);
-  border-color: rgba(118,255,76,0.22);
+  border-color: rgba(118,185,0,0.24);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(118,185,0,0.04));
 }
 
 .cardGlow {
@@ -151,33 +152,33 @@
   inset: auto -60px -60px auto;
   width: 160px;
   height: 160px;
-  background: radial-gradient(circle, rgba(118,255,76,0.18), transparent 70%);
+  background: radial-gradient(circle, rgba(118,185,0,0.16), transparent 70%);
   pointer-events: none;
 }
 
 .cardEyebrow {
   display: inline-block;
   margin-bottom: 0.85rem;
-  color: #9fe870;
+  color: #b7ea63;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .card h3 {
-  color: #f5f7f2;
+  color: #ffffff;
   margin-bottom: 0.75rem;
 }
 
 .card p {
-  color: rgba(245,247,242,0.74);
+  color: rgba(229,231,235,0.74);
   line-height: 1.7;
 }
 
 .cardAction {
   display: inline-block;
   margin-top: 1rem;
-  color: #9fe870;
+  color: #b7ea63;
   font-weight: 600;
 }
 
@@ -207,15 +208,17 @@
   align-items: center;
   padding: 0.6rem 0.9rem;
   border-radius: 999px;
-  background: rgba(118,255,76,0.08);
-  border: 1px solid rgba(118,255,76,0.18);
-  color: #c8ff9f;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e5e7eb;
   text-decoration: none;
 }
 
 .quickLink:hover {
   text-decoration: none;
-  background: rgba(118,255,76,0.12);
+  background: rgba(118,185,0,0.1);
+  border-color: rgba(118,185,0,0.24);
+  color: #ffffff;
 }
 
 @media (min-width: 996px) {
