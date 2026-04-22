@@ -42,12 +42,6 @@ const quickLinks = [
   {label: 'TXT2KG', to: '/playbooks/txt2kg/'},
 ];
 
-const statItems = [
-  {label: '中文在线文档', value: '1 套'},
-  {label: '核心入口方向', value: '4 类'},
-  {label: '社区品牌域名', value: 'dgx-spark.ai'},
-];
-
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
 
@@ -76,14 +70,6 @@ export default function Home(): ReactNode {
               <Link className={styles.secondaryButton} to="https://common-buy.aliyun.com/?commodityCode=datav_spark_public_cn">
                 立即购买
               </Link>
-            </div>
-            <div className={styles.statsRow}>
-              {statItems.map((item) => (
-                <div key={item.label} className={styles.statCard}>
-                  <span className={styles.statValue}>{item.value}</span>
-                  <span className={styles.statLabel}>{item.label}</span>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -125,20 +111,9 @@ export default function Home(): ReactNode {
         </section>
 
         <section className="container margin-vert--lg">
-          <div className={styles.dualPanel}>
-            <div className={styles.noticeBox}>
-              <Heading as="h2">Community Notice</Heading>
-              <p>
-                This website is a community-driven Chinese translation based on the official DGX Spark Playbooks. It is made by the community and love, and is not affiliated with, endorsed by, or maintained by NVIDIA.
-              </p>
-            </div>
-            <div className={styles.noticeBox}>
-              <Heading as="h2">当前目标</Heading>
-              <p>
-                以 DGX Spark 中文社区 作为正式品牌入口，持续完善内容质量、术语一致性与上线体验。
-              </p>
-            </div>
-          </div>
+          <p className={styles.bottomNotice}>
+            Community Notice: This website is a community-driven Chinese translation based on the official DGX Spark Playbooks. It is made by the community and love, and is not affiliated with, endorsed by, or maintained by NVIDIA.
+          </p>
         </section>
       </main>
     </Layout>
