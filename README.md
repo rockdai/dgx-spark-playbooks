@@ -51,14 +51,14 @@
 - [Ollama](nvidia/ollama/)
 - [结合 Ollama 使用 Open WebUI](nvidia/open-webui/)
 - [OpenClaw 🦞](nvidia/openclaw/)
-- [在 DGX Spark 上使用 OpenShell 保护长期运行的 AI Agents](nvidia/openshell/)
+- [在 DGX Spark 上使用 OpenShell 保护长期运行的 AI 智能体](nvidia/openshell/)
 - [投资组合优化](nvidia/portfolio-optimization/)
 - [使用 PyTorch 微调](nvidia/pytorch-fine-tune/)
 - [在 AI Workbench 中构建 RAG 应用](nvidia/rag-ai-workbench/)
 - [使用 SGLang 进行推理](nvidia/sglang/)
 - [单细胞 RNA 测序](nvidia/single-cell/)
 - [Spark 与 Reachy 拍照亭](nvidia/spark-reachy-photo-booth/)
-- [投机解码](nvidia/speculative-decoding/)
+- [投机采样](nvidia/speculative-decoding/)
 - [在 Spark 上配置 Tailscale](nvidia/tailscale/)
 - [使用 TRT LLM 进行推理](nvidia/trt-llm/)
 - [在 DGX Spark 上从文本构建知识图谱](nvidia/txt2kg/)
@@ -66,7 +66,7 @@
 - [在 VS Code 中进行 Vibe Coding](nvidia/vibe-coding/)
 - [使用 vLLM 进行推理](nvidia/vllm/)
 - [VS Code](nvidia/vscode/)
-- [构建视频搜索与摘要（VSS）Agent](nvidia/vss/)
+- [构建视频搜索与摘要（VSS）智能体](nvidia/vss/)
 
 ## 资源
 

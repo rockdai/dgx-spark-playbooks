@@ -48,14 +48,14 @@
 - [Ollama](/playbooks/ollama/)
 - [结合 Ollama 使用 Open WebUI](/playbooks/open-webui/)
 - [OpenClaw 🦞](/playbooks/openclaw/)
-- [在 DGX Spark 上使用 OpenShell 保护长期运行的 AI Agents](/playbooks/openshell/)
+- [在 DGX Spark 上使用 OpenShell 保护长期运行的 AI 智能体](/playbooks/openshell/)
 - [投资组合优化](/playbooks/portfolio-optimization/)
 - [使用 PyTorch 微调](/playbooks/pytorch-fine-tune/)
 - [在 AI Workbench 中构建 RAG 应用](/playbooks/rag-ai-workbench/)
 - [使用 SGLang 进行推理](/playbooks/sglang/)
 - [单细胞 RNA 测序](/playbooks/single-cell/)
 - [Spark 与 Reachy 拍照亭](/playbooks/spark-reachy-photo-booth/)
-- [投机解码](/playbooks/speculative-decoding/)
+- [投机采样](/playbooks/speculative-decoding/)
 - [在 Spark 上配置 Tailscale](/playbooks/tailscale/)
 - [使用 TRT LLM 进行推理](/playbooks/trt-llm/)
 - [在 DGX Spark 上从文本构建知识图谱](/playbooks/txt2kg/)
@@ -63,7 +63,7 @@
 - [在 VS Code 中进行 Vibe Coding](/playbooks/vibe-coding/)
 - [使用 vLLM 进行推理](/playbooks/vllm/)
 - [VS Code](/playbooks/vscode/)
-- [构建视频搜索与摘要（VSS）Agent](/playbooks/vss/)
+- [构建视频搜索与摘要（VSS）智能体](/playbooks/vss/)
 
 ## 资源
 
