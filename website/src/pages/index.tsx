@@ -26,7 +26,7 @@ const featuredCards = [
     to: '/playbooks/pytorch-fine-tune/',
   },
   {
-    title: 'Agent 与应用',
+    title: '智能体与应用',
     eyebrow: 'Applications',
     description: '从 OpenClaw、OpenShell 到多智能体应用，整理适合中文社区的上手路径。',
     to: '/playbooks/openclaw/',
@@ -45,32 +45,36 @@ const quickLinks = [
 const statItems = [
   {label: '中文在线文档', value: '1 套'},
   {label: '核心入口方向', value: '4 类'},
-  {label: '部署目标域名', value: 'dgx-spark.ai'},
+  {label: '社区品牌域名', value: 'dgx-spark.ai'},
 ];
 
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
 
   return (
-    <Layout
-      title={siteConfig.title}
-      description="DGX Spark 中文手册，面向中文社区的在线文档站。">
+    <Layout title={siteConfig.title} description="DGX Spark 中文社区，面向中文开发者的在线文档与实践入口。">
       <header className={styles.hero}>
+        <div className={styles.heroAnimation} aria-hidden="true">
+          <span className={styles.orbOne} />
+          <span className={styles.orbTwo} />
+          <span className={styles.gridGlow} />
+          <span className={styles.scanline} />
+        </div>
         <div className="container">
           <div className={styles.heroInner}>
-            <p className={styles.kicker}>DGX Spark Chinese Docs</p>
+            <p className={styles.kicker}>DGX Spark Chinese Community</p>
             <Heading as="h1" className={styles.title}>
-              DGX Spark 中文手册
+              DGX Spark 中文社区
             </Heading>
             <p className={styles.subtitle}>
-              基于官方 DGX Spark Playbooks 整理的中文在线文档站，聚焦连接、推理、微调、Agent 与应用实践。
+              面向中文开发者、研究者与工程团队的 DGX Spark 在线文档、部署实践与社区入口。
             </p>
             <div className={styles.ctaRow}>
               <Link className="button button--primary button--lg" to="/intro">
-                开始阅读
+                进入社区文档
               </Link>
-              <Link className={styles.secondaryButton} to="/playbooks/vllm/">
-                浏览 Playbooks
+              <Link className={styles.secondaryButton} to="https://common-buy.aliyun.com/?commodityCode=datav_spark_public_cn">
+                立即购买
               </Link>
             </div>
             <div className={styles.statsRow}>
@@ -89,7 +93,7 @@ export default function Home(): ReactNode {
         <section className="container margin-vert--lg">
           <div className={styles.sectionHeader}>
             <Heading as="h2">选择你要进入的方向</Heading>
-            <p>参考 build.nvidia.com/spark 的入口方式，先把高频路径做成卡片式入口。</p>
+            <p>从连接、推理、训练到智能体应用，按最常见的中文社区路径快速进入。</p>
           </div>
           <div className={styles.cardGrid}>
             {featuredCards.map((card) => (
@@ -131,7 +135,7 @@ export default function Home(): ReactNode {
             <div className={styles.noticeBox}>
               <Heading as="h2">当前目标</Heading>
               <p>
-                先把站点以独立域名形式稳定上线，再逐步清理 broken links、broken anchors 与少量内容层 warning。
+                以 DGX Spark 中文社区 作为正式品牌入口，持续完善内容质量、术语一致性与上线体验。
               </p>
             </div>
           </div>

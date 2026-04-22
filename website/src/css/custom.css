@@ -98,6 +98,25 @@ html[data-theme='dark'] .navbar {
   color: #0b0b0c;
 }
 
+.navbar__buyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: #76b900;
+  border: 1px solid #76b900;
+  color: #0b0b0c !important;
+  font-weight: 700;
+}
+
+.navbar__buyButton:hover {
+  text-decoration: none;
+  background: #88cf12;
+  border-color: #88cf12;
+  color: #0b0b0c !important;
+}
+
 .button.button--secondary,
 .pagination-nav__link,
 .theme-doc-sidebar-container,

@@ -3,9 +3,8 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'DGX Spark 中文手册',
-  tagline: '面向中文社区的 DGX Spark Playbooks 在线文档站',
-  favicon: 'img/favicon.ico',
+  title: 'DGX Spark 中文社区',
+  tagline: '面向中文社区的 DGX Spark 在线文档与实践入口',
   future: {
     v4: true,
   },
@@ -81,9 +80,12 @@ const config: Config = {
           label: '全部文档',
         },
         {
-          href: 'https://github.com/rockdai/dgx-spark-playbooks-cn',
-          label: 'GitHub',
+          href: 'https://common-buy.aliyun.com/?commodityCode=datav_spark_public_cn',
+          label: '立即购买',
           position: 'right',
+          className: 'navbar__buyButton',
+          target: '_blank',
+          rel: 'noopener noreferrer',
         },
       ],
     },
@@ -103,8 +105,8 @@ const config: Config = {
           title: '项目',
           items: [
             {
-              label: 'GitHub 仓库',
-              href: 'https://github.com/rockdai/dgx-spark-playbooks-cn',
+              label: '立即购买',
+              href: 'https://common-buy.aliyun.com/?commodityCode=datav_spark_public_cn',
             },
             {
               label: '官方 DGX Spark Playbooks',
@@ -122,7 +124,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} DGX Spark 中文手册社区项目。Community-maintained, built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} DGX Spark 中文社区。Community-maintained, built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

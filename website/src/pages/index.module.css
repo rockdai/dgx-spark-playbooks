@@ -1,15 +1,72 @@
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 7rem 0 5rem;
+  padding: 8rem 0 5.5rem;
+  background: linear-gradient(180deg, #0b0b0c 0%, #121317 100%);
+}
+
+.heroAnimation {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orbOne,
+.orbTwo,
+.gridGlow,
+.scanline {
+  position: absolute;
+  display: block;
+}
+
+.orbOne {
+  width: 38rem;
+  height: 38rem;
+  left: -8rem;
+  top: -10rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(118,185,0,0.18) 0%, rgba(118,185,0,0.08) 35%, transparent 70%);
+  animation: floatOne 16s ease-in-out infinite;
+}
+
+.orbTwo {
+  width: 34rem;
+  height: 34rem;
+  right: -10rem;
+  top: 2rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(93, 93, 255, 0.16) 0%, rgba(93,93,255,0.06) 30%, transparent 72%);
+  animation: floatTwo 18s ease-in-out infinite;
+}
+
+.gridGlow {
+  inset: auto 0 0 0;
+  height: 55%;
   background:
-    radial-gradient(circle at top left, rgba(118, 185, 0, 0.12), transparent 26%),
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.06), transparent 22%),
-    linear-gradient(180deg, #0b0b0c 0%, #121317 100%);
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 28%, rgba(0,0,0,1) 100%);
+  opacity: 0.28;
+  transform: perspective(700px) rotateX(72deg) scale(1.3);
+  transform-origin: bottom center;
+}
+
+.scanline {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(118,185,0,0.6), transparent);
+  box-shadow: 0 0 24px rgba(118,185,0,0.5);
+  animation: scanlineMove 8s linear infinite;
 }
 
 .heroInner {
-  max-width: 880px;
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
 }
 
 .kicker {
@@ -28,15 +85,15 @@
 .title {
   margin-bottom: 1rem;
   color: #ffffff;
-  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
   line-height: 1.02;
 }
 
 .subtitle {
   max-width: 760px;
   color: rgba(229, 231, 235, 0.8);
-  font-size: 1.08rem;
-  line-height: 1.75;
+  font-size: 1.1rem;
+  line-height: 1.8;
 }
 
 .ctaRow {
@@ -58,6 +115,7 @@
   border-radius: 1rem;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
 }
 
 .statValue {
@@ -119,12 +177,6 @@
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
-}
-
-@media (min-width: 996px) {
-  .cardGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 .card {
@@ -222,6 +274,10 @@
 }
 
 @media (min-width: 996px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .statsRow {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -233,6 +289,22 @@
 
 @media screen and (max-width: 996px) {
   .hero {
-    padding: 5rem 0 4rem;
+    padding: 6rem 0 4rem;
   }
+}
+
+@keyframes floatOne {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(2rem, 1.5rem, 0); }
+}
+
+@keyframes floatTwo {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-2rem, 2rem, 0); }
+}
+
+@keyframes scanlineMove {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(520px); opacity: 0; }
 }
