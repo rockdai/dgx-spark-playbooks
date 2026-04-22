@@ -111,6 +111,10 @@ const config: Config = {
               href: 'https://common-buy.aliyun.com/?commodityCode=datav_spark_public_cn',
             },
             {
+              label: 'DataV.AI',
+              href: 'https://ai.datav.run',
+            },
+            {
               label: '官方 DGX Spark Playbooks',
               href: 'https://github.com/NVIDIA/dgx-spark-playbooks',
             },
