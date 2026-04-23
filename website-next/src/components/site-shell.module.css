@@ -7,8 +7,10 @@
 }
 
 .headerWrap {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 30;
   padding: 1rem 1.5rem 0;
 }
@@ -82,7 +84,7 @@
 .main {
   width: min(1200px, calc(100% - 3rem));
   margin: 0 auto;
-  padding: 0 0 5rem;
+  padding: 6.5rem 0 5rem;
 }
 
 .footer {
