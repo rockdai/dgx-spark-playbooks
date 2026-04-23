@@ -25,7 +25,7 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.heroGlow} />
         <p className={styles.eyebrow}>DGX Spark 中文社区</p>
-        <h1 className={styles.title}>为中文开发者重做一层真正可用的 DGX Spark 前端体验</h1>
+        <h1 className={styles.title}>DGX Spark 中文社区</h1>
         <p className={styles.subtitle}>
           不再依赖通用文档站壳子，而是把 DGX Spark 的中文内容、购买入口与高频实践路径整合成一套更像产品站的前端层。
         </p>

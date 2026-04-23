@@ -1,4 +1,5 @@
 import styles from "./site-shell.module.css";
+import { TopBar } from "./TopBar";
 
 type Props = {
   children: React.ReactNode;
@@ -7,24 +8,7 @@ type Props = {
 export function SiteShell({ children }: Props) {
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <a className={styles.brand} href="/">
-          DGX Spark 中文社区
-        </a>
-        <nav className={styles.nav}>
-          <a className={styles.navLink} href="/intro">
-            在线文档
-          </a>
-          <a
-            className={styles.buyButton}
-            href="https://common-buy.aliyun.com/?commodityCode=datav_spark_public_cn"
-            target="_blank"
-            rel="noreferrer"
-          >
-            立即购买
-          </a>
-        </nav>
-      </header>
+      <TopBar />
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
         <div className={styles.footerLinks}>
