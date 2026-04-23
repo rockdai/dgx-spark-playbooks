@@ -1,0 +1,225 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top center, rgba(118, 255, 61, 0.16), transparent 28%),
+    linear-gradient(180deg, #050806 0%, #0b0f0c 42%, #060807 100%);
+  color: #f3f5f7;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 8, 6, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navLink {
+  color: rgba(243, 245, 247, 0.78);
+}
+
+.buyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.75rem;
+  padding: 0 1.2rem;
+  border-radius: 999px;
+  background: #76ff3d;
+  color: #081006;
+  font-weight: 700;
+}
+
+.main {
+  width: min(1200px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 3rem 0 5rem;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0 5rem;
+}
+
+.heroGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 12%, rgba(118, 255, 61, 0.22), transparent 34%);
+  pointer-events: none;
+}
+
+.eyebrow,
+.sectionEyebrow {
+  margin-bottom: 1rem;
+  color: #76ff3d;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 14ch;
+  font-size: clamp(3rem, 7vw, 5.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.subtitle {
+  max-width: 54rem;
+  margin-top: 1.5rem;
+  color: rgba(243, 245, 247, 0.72);
+  font-size: 1.1rem;
+  line-height: 1.85;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.primaryAction {
+  background: #76ff3d;
+  color: #081006;
+}
+
+.secondaryAction {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f3f5f7;
+}
+
+.section {
+  padding-top: 1rem;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 18rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 1.5rem;
+  background: linear-gradient(180deg, rgba(18, 22, 19, 0.95) 0%, rgba(9, 11, 10, 0.98) 100%);
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(118, 255, 61, 0.4);
+}
+
+.cardLabel {
+  color: #76ff3d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card h3 {
+  font-size: 1.4rem;
+}
+
+.card p {
+  color: rgba(243, 245, 247, 0.7);
+  line-height: 1.8;
+}
+
+.cardCta {
+  margin-top: auto;
+  color: #caffba;
+  font-weight: 700;
+}
+
+.footer {
+  width: min(1200px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 0 0 2.5rem;
+  color: rgba(243, 245, 247, 0.6);
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 0 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.notice {
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .header {
+    padding: 1rem 1rem;
+  }
+
+  .main,
+  .footer {
+    width: min(100% - 1.5rem, 1200px);
+  }
+
+  .hero {
+    padding: 4.5rem 0 3.5rem;
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .navLink {
+    display: none;
+  }
+}
