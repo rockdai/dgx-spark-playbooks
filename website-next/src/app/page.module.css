@@ -149,10 +149,76 @@
 
 @media (max-width: 720px) {
   .hero {
-    padding: 4rem 0 1.75rem;
+    padding: 3rem 0 1.4rem;
+  }
+
+  .heroInner {
+    max-width: 100%;
   }
 
   .title {
+    max-width: 100%;
+    font-size: clamp(2.3rem, 13vw, 3.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+  }
+
+  .subtitle {
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .actions {
+    gap: 0.7rem;
+    margin-top: 1.3rem;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+  }
+
+  .cardsSection {
+    padding-top: 0.8rem;
+  }
+
+  .sectionHeader h2 {
     max-width: none;
+    font-size: 1.8rem;
+    line-height: 1.08;
+  }
+
+  .cardGrid {
+    gap: 0.85rem;
+    margin-top: 1.2rem;
+  }
+
+  .card {
+    min-height: auto;
+  }
+
+  .cardTop {
+    padding: 1rem 1rem 0;
+  }
+
+  .cardBody {
+    gap: 0.75rem;
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .cardBody h3 {
+    font-size: 1.2rem;
+  }
+
+  .cardBody p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .cardFooter {
+    padding: 0 1rem 1rem;
   }
 }

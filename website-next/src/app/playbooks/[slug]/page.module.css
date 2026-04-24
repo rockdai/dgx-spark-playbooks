@@ -105,3 +105,54 @@
     position: static;
   }
 }
+
+@media (max-width: 720px) {
+  .hero {
+    padding: 2.25rem 0 1.25rem;
+  }
+
+  .heroPanel {
+    padding: 1.15rem;
+    border-radius: 1rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.75rem;
+    font-size: 0.76rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 10vw, 2.8rem);
+    line-height: 1.04;
+  }
+
+  .description {
+    margin-top: 0.8rem;
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+
+  .metaRow {
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .metaRow span {
+    min-height: 1.9rem;
+    padding: 0 0.65rem;
+    font-size: 0.82rem;
+  }
+
+  .layout {
+    gap: 1rem;
+  }
+
+  .sidebarCard {
+    display: none;
+  }
+
+  .article {
+    padding: 1rem 0.95rem;
+    border-radius: 1rem;
+  }
+}
