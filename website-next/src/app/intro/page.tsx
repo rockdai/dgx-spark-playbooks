@@ -22,10 +22,7 @@ export default function IntroPage() {
             <div className={styles.groupList}>
               {playbookGroups.map((group) => (
                 <section key={group.id} className={styles.groupSection}>
-                  <p className={styles.groupTitle}>
-                    <span className={styles.groupIcon}>{group.icon}</span>
-                    {group.label}
-                  </p>
+                  <p className={styles.groupTitle}>{group.label}</p>
                   <div className={styles.sidebarList}>
                     {group.items.map((item) => (
                       <a key={item.slug} href={`/playbooks/${item.slug}`}>

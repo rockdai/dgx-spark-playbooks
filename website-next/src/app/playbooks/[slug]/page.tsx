@@ -44,10 +44,7 @@ export default async function PlaybookPage({ params }: Props) {
             <div className={styles.sidebarGroups}>
               {playbookGroups.map((group) => (
                 <section key={group.id} className={styles.groupSection}>
-                  <p className={styles.groupTitle}>
-                    <span className={styles.groupIcon}>{group.icon}</span>
-                    {group.label}
-                  </p>
+                  <p className={styles.groupTitle}>{group.label}</p>
                   <nav className={styles.groupNav}>
                     {group.items.map((item) => (
                       <a

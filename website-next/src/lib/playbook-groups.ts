@@ -1,7 +1,6 @@
 export type PlaybookGroup = {
   id: string;
   label: string;
-  icon: string;
   items: { slug: string; title: string }[];
 };
 
@@ -9,7 +8,6 @@ export const playbookGroups: PlaybookGroup[] = [
   {
     id: "onboarding",
     label: "Onboarding",
-    icon: "◎",
     items: [
       { slug: "connect-to-your-spark", title: "配置本地网络访问" },
       { slug: "open-webui", title: "结合 Ollama 使用 Open WebUI" },
@@ -18,7 +16,6 @@ export const playbookGroups: PlaybookGroup[] = [
   {
     id: "data-science",
     label: "Data Science",
-    icon: "◌",
     items: [
       { slug: "single-cell", title: "单细胞 RNA 测序" },
       { slug: "portfolio-optimization", title: "投资组合优化" },
@@ -30,7 +27,6 @@ export const playbookGroups: PlaybookGroup[] = [
   {
     id: "tools",
     label: "Tools",
-    icon: "◧",
     items: [
       { slug: "dgx-dashboard", title: "DGX Dashboard" },
       { slug: "comfy-ui", title: "Comfy UI" },
@@ -44,7 +40,6 @@ export const playbookGroups: PlaybookGroup[] = [
   {
     id: "fine-tuning",
     label: "Fine Tuning",
-    icon: "◔",
     items: [
       { slug: "flux-finetuning", title: "FLUX.1 Dreambooth LoRA 微调" },
       { slug: "llama-factory", title: "LLaMA Factory" },
@@ -56,7 +51,6 @@ export const playbookGroups: PlaybookGroup[] = [
   {
     id: "use-case",
     label: "Use Case",
-    icon: "✦",
     items: [
       { slug: "nemoclaw", title: "在 DGX Spark 上使用 NemoClaw、Nemotron 3 Super 与 Telegram" },
       { slug: "openshell", title: "在 DGX Spark 上使用 OpenShell 保护长期运行的 AI 智能体" },
@@ -74,7 +68,6 @@ export const playbookGroups: PlaybookGroup[] = [
   {
     id: "inference",
     label: "Inference",
-    icon: "◈",
     items: [
       { slug: "speculative-decoding", title: "投机采样" },
       { slug: "llama-cpp", title: "在 DGX Spark 上使用 llama.cpp 运行模型" },
