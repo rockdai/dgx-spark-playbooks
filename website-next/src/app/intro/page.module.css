@@ -48,14 +48,46 @@
   font-weight: 700;
 }
 
-.sidebarList {
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.groupSection {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: rgba(243, 245, 247, 0.58);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.groupIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  color: #76b900;
+}
+
+.sidebarList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
 .sidebarList a {
   color: rgba(243, 245, 247, 0.72);
+  line-height: 1.45;
 }
 
 .article {

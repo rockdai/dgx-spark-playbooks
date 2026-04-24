@@ -1,11 +1,11 @@
 import { MarkdownContent } from "@/components/MarkdownContent";
 import { SiteShell } from "@/components/SiteShell";
-import { getIntroPage, listPlaybooks } from "@/lib/content";
+import { getIntroPage } from "@/lib/content";
+import { playbookGroups } from "@/lib/playbook-groups";
 import styles from "./page.module.css";
 
 export default function IntroPage() {
   const intro = getIntroPage();
-  const playbooks = listPlaybooks();
 
   return (
     <SiteShell>
@@ -19,11 +19,21 @@ export default function IntroPage() {
         <aside className={styles.sidebar}>
           <div className={styles.sidebarCard}>
             <p className={styles.sidebarTitle}>Playbooks</p>
-            <div className={styles.sidebarList}>
-              {playbooks.map((item) => (
-                <a key={item.slug} href={`/playbooks/${item.slug}`}>
-                  {item.title}
-                </a>
+            <div className={styles.groupList}>
+              {playbookGroups.map((group) => (
+                <section key={group.id} className={styles.groupSection}>
+                  <p className={styles.groupTitle}>
+                    <span className={styles.groupIcon}>{group.icon}</span>
+                    {group.label}
+                  </p>
+                  <div className={styles.sidebarList}>
+                    {group.items.map((item) => (
+                      <a key={item.slug} href={`/playbooks/${item.slug}`}>
+                        {item.title}
+                      </a>
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
           </div>

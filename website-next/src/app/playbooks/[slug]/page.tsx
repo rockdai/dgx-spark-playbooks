@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/MarkdownContent";
 import { SiteShell } from "@/components/SiteShell";
 import { getPlaybook, listPlaybooks } from "@/lib/content";
+import { playbookGroups } from "@/lib/playbook-groups";
 import styles from "./page.module.css";
 
 type Props = {
@@ -37,14 +38,30 @@ export default async function PlaybookPage({ params }: Props) {
       <section className={styles.layout}>
         <aside className={styles.sidebar}>
           <div className={styles.sidebarCard}>
-            <p className={styles.sidebarTitle}>页面目录</p>
-            <nav className={styles.toc}>
-              {playbook.toc.map((item) => (
-                <a key={`${item.level}-${item.id}`} href={`#${item.id}`} className={item.level === 3 ? styles.tocChild : ""}>
-                  {item.text}
-                </a>
+            <a className={styles.viewAll} href="/intro">
+              ← View All Playbooks
+            </a>
+            <div className={styles.sidebarGroups}>
+              {playbookGroups.map((group) => (
+                <section key={group.id} className={styles.groupSection}>
+                  <p className={styles.groupTitle}>
+                    <span className={styles.groupIcon}>{group.icon}</span>
+                    {group.label}
+                  </p>
+                  <nav className={styles.groupNav}>
+                    {group.items.map((item) => (
+                      <a
+                        key={item.slug}
+                        href={`/playbooks/${item.slug}`}
+                        className={item.slug === slug ? styles.activeLink : ""}
+                      >
+                        {item.title}
+                      </a>
+                    ))}
+                  </nav>
+                </section>
               ))}
-            </nav>
+            </div>
           </div>
         </aside>
 

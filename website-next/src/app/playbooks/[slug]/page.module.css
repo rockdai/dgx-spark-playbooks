@@ -7,14 +7,14 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1.75rem;
   background:
-    radial-gradient(circle at top left, rgba(118, 255, 61, 0.12), transparent 35%),
+    radial-gradient(circle at top left, rgba(118, 185, 0, 0.12), transparent 35%),
     linear-gradient(180deg, rgba(15, 19, 16, 0.96) 0%, rgba(9, 11, 10, 0.98) 100%);
 }
 
 .eyebrow {
   margin-bottom: 1rem;
-  color: #76ff3d;
-  font-size: 0.85rem;
+  color: #76b900;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -52,41 +52,81 @@
 
 .layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 1.5rem;
   padding-bottom: 2rem;
 }
 
 .sidebarCard {
   position: sticky;
-  top: 6rem;
-  padding: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.25rem;
-  background: rgba(11, 15, 12, 0.88);
+  top: 1rem;
+  padding: 1rem 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.sidebarTitle {
-  margin-bottom: 1rem;
-  color: #f9fafb;
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1.5rem 1.25rem;
+  color: #f1f5ef;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
-.toc {
+.sidebarGroups {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.6rem;
 }
 
-.toc a {
-  color: rgba(243, 245, 247, 0.72);
-  line-height: 1.5;
+.groupSection {
+  display: flex;
+  flex-direction: column;
 }
 
-.tocChild {
-  padding-left: 0.9rem;
-  color: rgba(243, 245, 247, 0.55) !important;
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0.9rem;
+  color: rgba(243, 245, 247, 0.48);
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.groupIcon {
+  color: #76b900;
+}
+
+.groupNav {
+  display: flex;
+  flex-direction: column;
+}
+
+.groupNav a {
+  position: relative;
+  padding: 0.72rem 1.5rem;
+  color: rgba(243, 245, 247, 0.82);
   font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.groupNav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.activeLink {
+  background: linear-gradient(90deg, transparent 0%, rgba(118, 185, 0, 0.16) 100%);
+}
+
+.activeLink::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, #76b900 0%, #c7ff67 100%);
 }
 
 .article {
@@ -103,6 +143,9 @@
 
   .sidebarCard {
     position: static;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
   }
 }
 
