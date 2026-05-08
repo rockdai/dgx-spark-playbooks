@@ -26,7 +26,7 @@
   - [步骤 7. 交互式 TUI](#step-7-interactive-tui)
   - [步骤8.退出沙箱并访问Web UI](#step-8-exit-the-sandbox-and-access-the-web-ui)
   - [第 9 步：创建 Telegram 机器人](#step-9-create-a-telegram-bot)
-  - [步骤 10. 配置并启动 Telegram 桥](#step-10-configure-and-start-the-telegram-bridge)
+  - [步骤 10. 安装 cloudflared 并启动 Telegram 桥](#step-10-install-cloudflared-and-start-the-telegram-bridge)
   - [步骤11.停止服务](#step-11-stop-services)
   - [步骤12.卸载NemoClaw](#step-12-uninstall-nemoclaw)
 - [故障排查](#troubleshooting)
@@ -105,8 +105,7 @@
 **硬件和访问：**
 
 - 具有键盘和显示器或 SSH 访问权限的 DGX Spark (GB10)
-- 来自 [build.nvidia.com](https://build.nvidia.com/settings/api-keys) 的 **NVIDIA API 密钥**（Telegram 桥需要）
-- 来自 [@BotFather](https://t.me/BotFather) 的 **Telegram 机器人令牌**（使用 `/newbot` 创建一个）
+- 来自 [@BotFather](https://t.me/BotFather) 的 **Telegram 机器人令牌**（使用 `/newbot` 创建）—— 仅在需要 Telegram 机器人时才需要。请在运行安装程序*之前*准备好；板载向导会提示输入。
 
 **软件：**
 
@@ -127,8 +126,7 @@ docker info --format '{{.ServerVersion}}'
 
 | 物品 | 哪里可以得到它 |
 |------|----------------|
-| NVIDIA API 密钥 | [build.nvidia.com/settings/api-keys](https://build.nvidia.com/settings/api-keys) |
-| Telegram 机器人令牌 | Telegram 上的 [@BotFather](https://t.me/BotFather) -- 使用 `/newbot` 创建 |
+| Telegram 机器人令牌（可选） | Telegram 上的 [@BotFather](https://t.me/BotFather) -- 使用 `/newbot` 创建。仅 Telegram 机器人需要；请在运行安装程序前准备好。 |
 
 <a id="ancillary-files"></a>
 ### 附属文件
@@ -140,8 +138,8 @@ docker info --format '{{.ServerVersion}}'
 
 - **预计时间：** 20--30 分钟（Ollama 和模型已下载）。首次模型下载会增加约 15--30 分钟，具体取决于网络速度。
 - **风险级别：**中——您正在沙箱中运行人工智能智能体；隔离可以降低风险，但不能消除风险。使用干净的环境，不要连接敏感数据或生产账户。
-- **最后更新：** 2026 年 3 月 31 日
-  * 首次出版
+- **最后更新：** 2026 年 4 月 28 日
+  * 适配 NemoClaw v0.0.22+：修订了 Telegram 设置，重命名了隧道命令，更新了卸载说明。
 
 <a id="instructions"></a>
 ## 操作步骤
@@ -264,9 +262,13 @@ curl -fsSL https://www.nvidia.com/nemoclaw.sh | bash
 板载向导将引导您完成设置：
 
 1. **沙箱名称** -- 选择一个名称（例如 `my-assistant`）。名称必须是小写字母数字，仅包含连字符。
-2. **推理提供程序** - 选择**本地 Ollama**（选项 7）。
-3. **模型** - 选择**nemotron-3-super:120b**（选项 1）。
-4. **策略预设** - 出现提示时接受建议的预设（点击 **Y**）。
+2. **推理提供程序** - 选择**本地 Ollama**。
+3. **模型** - 选择**nemotron-3-super:120b**。
+4. **消息渠道** -- 如果您想使用 Telegram 机器人，请在此处选择 `telegram`，并在提示时粘贴您的机器人令牌。先通过 Telegram 中的 [@BotFather](https://t.me/BotFather) 创建机器人（参见步骤 9）。如果跳过此步，您可以稍后重新运行安装程序，重新创建启用 Telegram 的沙箱。
+5. **策略预设** - 出现提示时接受建议的预设（点击 **Y**）。
+
+> [!IMPORTANT]
+> 必须在此步骤配置 Telegram。渠道插件和机器人令牌会在板载过程中接入沙箱容器 —— 它们无法通过在主机上导出环境变量来添加到已存在的沙箱中。
 
 完成后您将看到如下输出：
 
@@ -314,7 +316,7 @@ curl -sf https://inference.local/v1/models
 仍在沙箱内，发送测试消息：
 
 ```bash
-openclaw agent --agent main --local -m "hello" --session-id test
+openclaw agent --agent main -m "hello" --session-id test
 ```
 
 智能体将使用 Nemotron 3 Super 进行响应。对于本地运行的 120B 参数模型，首次响应可能需要 30--90 秒。
@@ -345,7 +347,7 @@ exit
 http://127.0.0.1:18789/#token=<long-token-here>
 ```
 
-**如果从远程计算机访问 Web UI**，您需要设置端口转发。
+**如果从远程计算机访问 Web UI**，您需要设置 SSH 隧道。NemoClaw 板载向导已经在 Spark 上创建了 18789 端口转发，所以您只需从远程计算机做 SSH 隧道即可。
 
 首先，找到 Spark 的 IP 地址。在 Spark 上运行：
 
@@ -355,13 +357,7 @@ hostname -I | awk '{print $1}'
 
 这将打印主 IP 地址（例如 `192.168.1.42`）。您还可以在 Spark 桌面上的 **设置 > Wi-Fi** 或 **设置 > 网络** 中找到它，或者检查路由器的连接设备列表。
 
-在 Spark 主机上启动端口转发：
-
-```bash
-openshell forward start 18789 my-assistant --background
-```
-
-然后从远程计算机创建到 Spark 的 SSH 隧道（将 `<your-spark-ip>` 替换为上面的 IP 地址）：
+从远程计算机创建到 Spark 的 SSH 隧道（将 `<your-spark-ip>` 替换为上面的 IP 地址）：
 
 ```bash
 ssh -L 18789:127.0.0.1:18789 <your-user>@<your-spark-ip>
@@ -376,64 +372,69 @@ http://127.0.0.1:18789/#token=<long-token-here>
 > [！重要的]
 > 使用 `127.0.0.1`，而不是 `localhost` —— 网关来源检查需要完全匹配。
 
+> [!NOTE]
+> 如果 Web UI 加载失败且端口转发可能已失效，请在 Spark 主机上重置：
+> ```bash
+> openshell forward stop 18789 my-assistant || true
+> openshell forward start 18789 my-assistant --background
+> ```
+
 ---
 
 ## 第三阶段：Telegram 机器人
 
-> [！笔记]
-> 如果您已在 NemoClaw 入门向导（步骤 5/8）期间配置了 Telegram，则可以跳过此阶段。这些步骤包括在初始设置后添加 Telegram。
+> [!IMPORTANT]
+> 必须在 **NemoClaw 板载向导**（步骤 4 → 消息渠道）中启用 Telegram。渠道插件和机器人令牌在创建沙箱时会接入沙箱容器 —— `policy-add` 仅打开网络出口，单独使用是不够的。如果您在板载时跳过了 Telegram，请重新运行安装程序，并在**消息渠道**步骤选择 Telegram 来重新创建沙箱。
 
 <a id="step-9-create-a-telegram-bot"></a>
 ### 第 9 步：创建 Telegram 机器人
 
-打开 Telegram，找到 [@BotFather](https://t.me/BotFather)，发送 `/newbot`，然后按照提示操作。复制它为您提供的机器人令牌。
+请在步骤 4 运行 NemoClaw 安装程序**之前**完成此步骤，以便向导提示时您已准备好机器人令牌。
 
-<a id="step-10-configure-and-start-the-telegram-bridge"></a>
-### 步骤 10. 配置并启动 Telegram 桥
+打开 Telegram，找到 [@BotFather](https://t.me/BotFather)，发送 `/newbot`，然后按照提示操作。复制它为您提供的机器人令牌，并在到达**消息渠道**步骤时粘贴到向导中。
+
+<a id="step-10-install-cloudflared-and-start-the-telegram-bridge"></a>
+### 步骤 10. 安装 cloudflared 并启动 Telegram 桥
+
+Telegram 桥需要一个公网 webhook URL，以便 Telegram 能将消息投递到您的机器人。NemoClaw 使用 [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) 创建免费的 `trycloudflare.com` 隧道。
 
 确保您位于 **主机**（不在沙箱内）。如果您位于沙箱内，请先运行 `exit`。
 
-设置所需的环境变量。将占位符替换为您的实际值。 `SANDBOX_NAME` 必须与您在板载向导中选择的沙箱名称匹配：
+安装 cloudflared（DGX Spark 是 arm64）：
 
 ```bash
-export TELEGRAM_BOT_TOKEN=<your-bot-token>
-export SANDBOX_NAME=my-assistant
-export NVIDIA_API_KEY=<your-nvidia-api-key>
+curl -L --output cloudflared.deb \
+  https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+sudo dpkg -i cloudflared.deb
 ```
 
-将 Telegram 网络策略添加到沙箱中：
+启动隧道：
 
 ```bash
-nemoclaw my-assistant policy-add
+nemoclaw tunnel start
 ```
 
-出现提示时，选择 `telegram` 并点击 **Y** 进行确认。
-
-启动电报桥。
-
-```bash
-export TELEGRAM_BOT_TOKEN=<your-bot-token>
-nemoclaw start
-```
-
-仅当设置 `TELEGRAM_BOT_TOKEN` 环境变量时，Telegram 桥才会启动。验证服务正在运行：
+验证公网 URL 可用：
 
 ```bash
 nemoclaw status
 ```
 
+您应当看到 `● cloudflared` 以及一个 `trycloudflare.com` 公网 URL（例如 `https://assembled-peer-persian-kitty.trycloudflare.com`）。
+
 打开 Telegram，找到您的机器人，然后向其发送消息。机器人将其转发给智能体并回复。
+
+> [!NOTE]
+> 如果 `nemoclaw tunnel start` 输出 `cloudflared not found — no public URL`，说明上面的 cloudflared 安装未成功完成。请重新运行安装命令，然后重启隧道：
+> ```bash
+> nemoclaw tunnel stop && nemoclaw tunnel start
+> ```
 
 > [！笔记]
 > 对于本地运行的 120B 参数模型，第一次响应可能需要 30--90 秒。
 
-> [！笔记]
-> 如果桥未出现在 `nemoclaw status` 中，请确保在运行 `nemoclaw start` 的同一 shell 会话中导出 `TELEGRAM_BOT_TOKEN`。您还可以尝试停止并重新启动：
-> ````bash
-> 尼莫爪停止
-> 导出 TELEGRAM_BOT_TOKEN=<your-bot-token>
-> 尼莫爪开始
-> ````
+> [!NOTE]
+> 如果发送消息时返回 `Error: Channel is unavailable: telegram`，说明在板载时未启用该渠道。请重新运行安装程序，在**消息渠道**步骤选中 Telegram 来重新创建沙箱。
 
 > [！笔记]
 > 有关限制哪些 Telegram 聊天可以与智能体交互的详细信息，请参阅 [NemoClaw Telegram bridge 文档](https://docs.nvidia.com/nemoclaw/latest/deployment/set-up-telegram-bridge.html)。
@@ -445,10 +446,10 @@ nemoclaw status
 <a id="step-11-stop-services"></a>
 ### 步骤11.停止服务
 
-停止任何正在运行的辅助服务（Telegram 桥、cloudflared 隧道）：
+停止 cloudflared 隧道：
 
 ```bash
-nemoclaw stop
+nemoclaw tunnel stop
 ```
 
 停止端口转发：
@@ -461,14 +462,13 @@ openshell forward stop 18789    # stop the dashboard forward
 <a id="step-12-uninstall-nemoclaw"></a>
 ### 步骤12.卸载NemoClaw
 
-从克隆的源目录运行卸载程序。它会删除所有沙箱、OpenShell 网关、Docker 容器/映像/卷、CLI 和所有状态文件。 Docker、Node.js、npm 和 Ollama 均被保留。
+通过 curl 运行卸载程序（与 [NemoClaw README](https://github.com/NVIDIA/NemoClaw) 保持一致）。它会删除所有沙箱、OpenShell 网关、Docker 容器/映像/卷、CLI 和所有状态文件。Docker、Node.js、npm 和 Ollama 均被保留。
 
 ```bash
-cd ~/.nemoclaw/source
-./uninstall.sh
+curl -fsSL https://raw.githubusercontent.com/NVIDIA/NemoClaw/refs/heads/main/uninstall.sh | bash
 ```
 
-**卸载程序标志：**
+**卸载程序标志**（通过 `bash -s -- <flags>` 传入）：
 
 | 旗帜 | 影响 |
 |------|--------|
@@ -476,10 +476,10 @@ cd ~/.nemoclaw/source
 | `--keep-openshell` | 将 `openshell` 二进制文件保留在原处 |
 | `--delete-models` | 同时删除 NemoClaw 拉出的 Ollama 模型 |
 
-要删除包括 Ollama 模型在内的所有内容：
+要非交互式地删除包括 Ollama 模型在内的所有内容：
 
 ```bash
-./uninstall.sh --yes --delete-models
+curl -fsSL https://raw.githubusercontent.com/NVIDIA/NemoClaw/refs/heads/main/uninstall.sh | bash -s -- --yes --delete-models
 ```
 
 卸载程序运行 6 个步骤：
@@ -491,7 +491,7 @@ cd ~/.nemoclaw/source
 6. 删除状态目录（`~/.nemoclaw`、`~/.config/openshell`、`~/.config/nemoclaw`）和 OpenShell 二进制文件
 
 > [！笔记]
-> 作为步骤 6 中状态清理的一部分，将删除 `~/.nemoclaw/source` 处的源克隆。如果要保留本地副本，请在运行卸载程序之前将其移动或备份。
+> 如果您在 `~/.nemoclaw/source` 有一份想保留的本地克隆，请在运行卸载程序之前将其移动或备份 —— 它会在步骤 6 的状态清理中被删除。
 
 ## 有用的命令
 
@@ -501,13 +501,13 @@ cd ~/.nemoclaw/source
 | `nemoclaw my-assistant status` | 显示沙箱状态和推理配置 |
 | `nemoclaw my-assistant logs --follow` | 实时流式传输沙箱日志 |
 | `nemoclaw list` | 列出所有已注册的沙箱 |
-| `nemoclaw start` | 启动辅助服务（Telegrambridge、cloudflared） |
-| `nemoclaw stop` | 停止辅助服务 |
+| `nemoclaw tunnel start` | 启动 cloudflared 隧道（用于 Telegram webhooks 的公网 URL） |
+| `nemoclaw tunnel stop` | 停止 cloudflared 隧道 |
 | `openshell term` | 打开主机上的监控TUI |
 | `openshell forward list` | 列出活动端口转发 |
 | `openshell forward start 18789 my-assistant --background` | 重新启动 Web UI 的端口转发 |
-| `cd ~/.nemoclaw/source && ./uninstall.sh` | 删除 NemoClaw（保留 Docker、Node.js、Ollama） |
-| `cd ~/.nemoclaw/source && ./uninstall.sh --delete-models` | 删除 NemoClaw 和 Ollama 模型 |
+| `curl -fsSL https://raw.githubusercontent.com/NVIDIA/NemoClaw/refs/heads/main/uninstall.sh \| bash` | 删除 NemoClaw（保留 Docker、Node.js、Ollama） |
+| `curl -fsSL https://raw.githubusercontent.com/NVIDIA/NemoClaw/refs/heads/main/uninstall.sh \| bash -s -- --delete-models` | 删除 NemoClaw 和 Ollama 模型 |
 
 <a id="troubleshooting"></a>
 ## 故障排查

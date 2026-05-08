@@ -55,6 +55,9 @@ Spark 上的 vLLM 支持以下模型。所有列出的模型均可供使用：
 
 | 模型 | 量化 | 支持状态 | 模型标识 |
 |-------|-------------|----------------|-----------|
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | BF16 | ✅ | [`nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`](https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16) |
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | FP8 | ✅ | [`nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-FP8`](https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-FP8) |
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | NVFP4 | ✅ | [`nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`](https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4) |
 | **Gemma 4 31B IT** | BF16 | ✅ | [`google/gemma-4-31B-it`](https://huggingface.co/google/gemma-4-31B-it) |
 | **Gemma 4 31B IT** | NVFP4 | ✅ | [`nvidia/Gemma-4-31B-IT-NVFP4`](https://huggingface.co/nvidia/Gemma-4-31B-IT-NVFP4) |
 | **Gemma 4 26B A4B IT** | BF16 | ✅ | [`google/gemma-4-26B-A4B-it`](https://huggingface.co/google/gemma-4-26B-A4B-it) |
@@ -95,12 +98,23 @@ Spark 上的 vLLM 支持以下模型。所有列出的模型均可供使用：
 * **持续时间：** Docker 方法需要 30 分钟
 * **风险：** 容器注册表访问需要内部凭据
 * **回滚：**容器方法是非破坏性的。
-* **最后更新：** 2026 年 4 月 2 日
-  * 添加对 Gemma 4 模型系列的支持
+* **最后更新：** 2026 年 4 月 28 日
+  * 添加对 Nemotron-3-Nano-Omni reasoning BF16、FP8、NVFP4 的支持
 
 <a id="instructions"></a>
 ## 操作步骤
-## 步骤1.配置Docker权限
+
+## 步骤 1. 使用模型专属部署指南
+
+某些模型需要特殊的部署配置。请参考其各自的模型卡以在 DGX Spark 上运行：
+
+| 模型 | 量化 | HF 模型卡链接 |
+|-------|-------------|----------------|
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | BF16 | https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 |
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | FP8 | https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-FP8 |
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | NVFP4 | https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4 |
+
+## 步骤 2. 配置 Docker 权限
 
 要在不使用 sudo 的情况下轻松管理容器，您必须位于 `docker` 组中。如果您选择跳过此步骤，则需要使用 sudo 运行 Docker 命令。
 
@@ -116,7 +130,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-## 步骤 2. 拉取 vLLM 容器映像
+## 步骤 3. 拉取 vLLM 容器映像
 
 从 https://catalog.ngc.nvidia.com/orgs/nvidia/containers/vllm 查找最新的容器版本
 
@@ -137,7 +151,7 @@ docker pull nvcr.io/nvidia/vllm:${LATEST_VLLM_VERSION}
 docker pull vllm/vllm-openai:gemma4-cu130
 ```
 
-## 步骤 3. 在容器中测试 vLLM
+## 步骤 4. 在容器中测试 vLLM
 
 启动容器并使用测试模型启动 vLLM 服务器以验证基本功能。
 
@@ -172,7 +186,7 @@ curl http://localhost:8000/v1/chat/completions \
 
 预期响应应包含 `"content": "204"` 或类似的数学计算。
 
-## 步骤 4. 清理和回滚
+## 步骤 5. 清理和回滚
 
 对于容器方法（非破坏性）：
 
@@ -181,7 +195,7 @@ docker rm $(docker ps -aq --filter ancestor=nvcr.io/nvidia/vllm:${LATEST_VLLM_VE
 docker rmi nvcr.io/nvidia/vllm
 ```
 
-## 步骤 5. 后续步骤
+## 步骤 6. 后续步骤
 
 - **生产部署：** 根据您的特定模型要求配置 vLLM
 - **性能调整：** 根据您的工作负载调整批量大小和内存设置

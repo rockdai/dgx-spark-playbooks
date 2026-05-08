@@ -1,6 +1,6 @@
 # 在 DGX Spark 上使用 llama.cpp 运行模型
 
-> 使用 CUDA 构建 llama.cpp 并通过 OpenAI 兼容的 API 提供模型（以 Gemma 4 31B IT 为例）
+> 使用 CUDA 构建 llama.cpp 并通过 OpenAI 兼容的 API 提供模型（以 Nemotron 3 Nano Omni 为例）
 
 
 ## 目录
@@ -18,15 +18,15 @@
 
 [llama.cpp](https://github.com/ggml-org/llama.cpp) 是用于大型语言模型的轻量级 C/C++ 推理堆栈。您可以使用 CUDA 构建它，以便张量工作在 DGX Spark GB10 GPU 上运行，然后加载 GGUF 权重并通过 `llama-server` 的 OpenAI 兼容 HTTP API 公开聊天。
 
-本剧本从头到尾地遍历该堆栈。作为模型示例，它使用 **Gemma 4 31B IT** - 由 Google DeepMind 构建的前沿推理模型，llama.cpp 支持，在编码、智能体工作流程和微调方面具有优势。说明从 Hugging Face 下载其 **F16** GGUF。相同的构建和服务器步骤适用于其他 GGUF（包括下面支持矩阵中的其他大小）。
+本剧本以 **Nemotron 3 Nano Omni**（NVIDIA 的 MoE 系列，能在 Spark 上以量化 GGUF 良好运行）作为实战示例，从头到尾地遍历该堆栈。所有受支持模型的检查点选择和路径都汇总在下面的矩阵中；命令位于操作步骤中。
 
 ## 你将完成什么
 
-您将使用 GB10 的 CUDA 构建 llama.cpp，下载 Gemma 4 31B IT 模型检查点，并使用 GPU 卸载运行 **`llama-server`**。你得到：
+您将使用 GB10 的 CUDA 构建 llama.cpp，下载 **Nemotron 3 Nano Omni** 示例检查点，并使用 GPU 卸载运行 **`llama-server`**。你得到：
 
 - 通过 llama.cpp 进行本地推理（无需单独的 Python 推理框架）
 - 用于工具和应用程序的 OpenAI 兼容 `/v1/chat/completions` 端点
-- **Gemma 4 31B IT** 在 DGX Spark 的该堆栈上运行的具体验证
+- **Nemotron 3 Nano Omni** 示例在 DGX Spark 的该堆栈上运行的具体验证
 
 ## 开始之前需要了解什么
 
@@ -40,8 +40,8 @@
 **硬件要求**
 
 - 配备 GB10 GPU 的 NVIDIA DGX Spark
-- 为 F16 检查点提供足够的统一内存（仅权重约为 **~62GB**；如果包含 KV 缓存和运行时开销，则更多）
-- 至少 **~70GB** 可用磁盘用于 F16 下载和构建工件（如果您需要更少的磁盘和 VRAM，请使用同一仓库中较小的数量）
+- 为示例 **Q8_0** 检查点提供足够的统一内存（权重约为 **~35GB**，加上 KV 缓存和运行时开销——如选择更大的量化或更长上下文则需扩容）
+- 至少 **~40GB** 可用磁盘用于示例下载和构建工件（如果保留多个 GGUF 则需要更多）
 
 **软件要求**
 
@@ -53,10 +53,13 @@
 
 ## 模型支持矩阵
 
-Spark 上的 llama.cpp 支持以下模型。所有列出的模型均可供使用：
+Spark 上的 llama.cpp 支持以下模型。说明默认使用 **Nemotron 3 Nano Omni** 示例行。
 
 | 模型 | 支持状态 | 模型标识 |
 |-------|----------------|-----------|
+| **Nemotron 3 Nano Omni**（示例演练） | ✅ | `ggml-org/NVIDIA-Nemotron-3-Nano-Omni` |
+| **Qwen3.6-35B-A3B** | ✅ | `unsloth/Qwen3.6-35B-A3B-GGUF` |
+| **Qwen3.6-27B** | ✅ | `unsloth/Qwen3.6-27B-GGUF` |
 | **Gemma 4 31B IT** | ✅ | `ggml-org/gemma-4-31B-it-GGUF` |
 | **Gemma 4 26B A4B IT** | ✅ | `ggml-org/gemma-4-26B-A4B-it-GGUF` |
 | **Gemma 4 E4B IT** | ✅ | `ggml-org/gemma-4-E4B-it-GGUF` |
@@ -65,17 +68,17 @@ Spark 上的 llama.cpp 支持以下模型。所有列出的模型均可供使用
 
 ## 时间与风险
 
-* **预计时间：** 大约 30 分钟，加上下载 ~62GB 示例
+* **预计时间：** 大约 30 分钟，加上下载示例 GGUF（默认量化约 ~35GB 量级）
 * **风险级别：** 低 — 构建是您的克隆本地的；以下步骤无需进行系统范围内的安装
 * **回滚：**删除`llama.cpp`克隆以及`~/models/`下的模型目录以回收磁盘空间
-* **最后更新：** 2026 年 4 月 2 日
-  * 首次出版
+* **最后更新：** 2026 年 4 月 28 日
+  * 演练改用 Nemotron Omni；其他模型行仍可用
 
 <a id="instructions"></a>
 ## 操作步骤
 ## 步骤 1. 验证先决条件
 
-本演练使用 **Gemma 4 31B IT** (`gemma-4-31B-it-f16.gguf`) 作为示例检查点。您可以通过在后续步骤中更改 `hf download` 文件名和 `--model` 路径来替换 [`ggml-org/gemma-4-31B-it-GGUF`](https://huggingface.co/ggml-org/gemma-4-31B-it-GGUF) 中的另一个 GGUF（例如 `Q4_K_M` 或 `Q8_0`）。
+**示例**检查点为 Hugging Face 仓库 **`ggml-org/NVIDIA-Nemotron-3-Nano-Omni`** 中的 **`nemotron-3-nano-omni-ga_v1.0-Q8_0.gguf`**（完整标识：`ggml-org/NVIDIA-Nemotron-3-Nano-Omni/nemotron-3-nano-omni-ga_v1.0-Q8_0.gguf`）。其他受支持的 GGUF——包括 Qwen3.6、Gemma 以及其他 Nemotron Omni 构建——使用相同的构建和服务器步骤；只需更改 `hf download` 与 `--model` 路径（见上方模型矩阵）。
 
 确保安装了所需的工具：
 
@@ -122,25 +125,25 @@ make -j8
 
 构建通常需要 5-10 分钟左右。完成后，`llama-server` 等二进制文件将出现在 `build/bin/` 下。
 
-## 步骤 4. 下载 Gemma 4 31B IT GGUF（支持的模型示例）
+## 步骤 4. 下载示例 Nemotron 3 Nano Omni GGUF
 
-llama.cpp 以 **GGUF** 格式加载模型。 **gemma-4-31B-it** 可以从 Hugging Face 获得 GGUF 版本；该剧本使用 F16 变体，可在 GB10 级硬件上平衡质量和内存。
+llama.cpp 以 **GGUF** 格式加载模型。本剧本使用来自 `ggml-org/NVIDIA-Nemotron-3-Nano-Omni` 的 **Q8_0** 检查点，可在 DGX Spark GB10 的统一内存上平衡质量和内存。
 
 ```bash
-hf download ggml-org/gemma-4-31B-it-GGUF \
-  gemma-4-31B-it-f16.gguf \
-  --local-dir ~/models/gemma-4-31B-it-GGUF
+hf download ggml-org/NVIDIA-Nemotron-3-Nano-Omni \
+  nemotron-3-nano-omni-ga_v1.0-Q8_0.gguf \
+  --local-dir ~/models/NVIDIA-Nemotron-3-Nano-Omni
 ```
 
-F16 文件很大（**~62GB**）。如果中断，可以继续下载。
+文件量级约为 **~35GB**（具体大小可能不同）。如果中断，可以继续下载。
 
-## 步骤 5. 使用 Gemma 4 31B IT 启动 llama-server
+## 步骤 5. 使用 Nemotron 3 Nano Omni 启动 llama-server
 
 从 `llama.cpp/build` 目录中，启动具有 GPU 卸载功能的 OpenAI 兼容服务器：
 
 ```bash
 ./bin/llama-server \
-  --model ~/models/gemma-4-31B-it-GGUF/gemma-4-31B-it-f16.gguf \
+  --model ~/models/NVIDIA-Nemotron-3-Nano-Omni/nemotron-3-nano-omni-ga_v1.0-Q8_0.gguf \
   --host 0.0.0.0 \
   --port 30000 \
   --n-gpu-layers 99 \
@@ -163,7 +166,7 @@ llama_new_context_with_model: n_ctx = 8192
 main: server is listening on 0.0.0.0:30000
 ```
 
-**测试时保持此终端打开**。大型 GGUF 可能需要几分钟才能加载；在您看到 `server is listening` 之前，端口 30000 上没有任何内容接受连接（请参阅排除 `curl` 报告连接被拒绝的情况）。
+**测试时保持此终端打开**。大型 GGUF 可能需要一分钟以上才能加载；在您看到 `server is listening` 之前，端口 30000 上没有任何内容接受连接（请参阅排除 `curl` 报告连接被拒绝的情况）。
 
 ## 步骤 6. 测试 API
 
@@ -173,7 +176,7 @@ main: server is listening on 0.0.0.0:30000
 curl -X POST http://127.0.0.1:30000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gemma4",
+    "model": "nemotron",
     "messages": [{"role": "user", "content": "New York is a great city because..."}],
     "max_tokens": 100
   }'
@@ -196,7 +199,7 @@ curl -X POST http://127.0.0.1:30000/v1/chat/completions \
     }
   ],
   "created": 1765916539,
-  "model": "gemma-4-31B-it-f16.gguf",
+  "model": "nemotron-3-nano-omni-ga_v1.0-Q8_0.gguf",
   "object": "chat.completion",
   "usage": {
     "completion_tokens": 100,
@@ -210,15 +213,15 @@ curl -X POST http://127.0.0.1:30000/v1/chat/completions \
 }
 ```
 
-## 步骤 7. 更长的完成时间（带有示例模型）
+## 步骤 7. 更长的完成时间（使用 Nemotron 3 Nano Omni）
 
-尝试使用稍长的提示来确认 **Gemma 4 31B IT** 的稳定生成：
+尝试使用稍长的提示来确认 **Nemotron 3 Nano Omni** 的稳定生成：
 
 ```bash
 curl -X POST http://127.0.0.1:30000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gemma4",
+    "model": "nemotron",
     "messages": [{"role": "user", "content": "Solve this step by step: If a train travels 120 miles in 2 hours, what is its average speed?"}],
     "max_tokens": 500
   }'
@@ -232,7 +235,7 @@ curl -X POST http://127.0.0.1:30000/v1/chat/completions \
 
 ```bash
 rm -rf ~/llama.cpp
-rm -rf ~/models/gemma-4-31B-it-GGUF
+rm -rf ~/models/NVIDIA-Nemotron-3-Nano-Omni
 ```
 
 如果不再需要 `hf`，请停用 Python venv：

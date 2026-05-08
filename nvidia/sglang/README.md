@@ -54,6 +54,7 @@ Spark 上的 SGLang 支持以下模型。所有列出的模型均可供使用：
 
 | 模型 | 量化 | 支持状态 | 模型标识 |
 |-------|-------------|----------------|-----------|
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | BF16 | ✅ | [`nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`](https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16) |
 | **GPT-OSS-20B** | MXFP4 | ✅ | `openai/gpt-oss-20b` |
 | **GPT-OSS-120B** | MXFP4 | ✅ | `openai/gpt-oss-120b` |
 | **Llama-3.1-8B-Instruct** | FP8 | ✅ | `nvidia/Llama-3.1-8B-Instruct-FP8` |
@@ -77,12 +78,21 @@ Spark 上的 SGLang 支持以下模型。所有列出的模型均可供使用：
 * **预计时间：** 初始设置和验证需要 30 分钟
 * **风险级别：** 低 - 使用预构建、经过验证的 SGLang 容器，配置最少
 * **回滚：** 使用 `docker stop` 和 `docker rm` 命令停止并删除容器
-* **最后更新：** 2026 年 3 月 15 日
-    * 使用最新的 NGC SGLang 容器：nvcr.io/nvidia/sglang:26.02-py3
+* **最后更新：** 2026 年 4 月 28 日
+    * 引入对 Nemotron-3-Nano-Omni reasoning FP8 的支持
 
 <a id="instructions"></a>
 ## 操作步骤
-## 步骤 1. 验证系统先决条件
+
+## 步骤 1. 使用模型专属部署指南
+
+某些模型需要特殊的部署配置。请参考其各自的模型卡以在 DGX Spark 上运行：
+
+| 模型 | 量化 | HF 模型卡链接 |
+|-------|-------------|----------------|
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | BF16 | https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 |
+
+## 步骤 2. 验证系统先决条件
 
 在继续之前，请检查您的 NVIDIA Spark 设备是否满足所有要求。此步骤运行于
 您的主机系统，并确保正确配置 Docker、GPU 驱动程序和容器工具包。
@@ -110,7 +120,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-## 步骤 2. 拉取 SGLang 容器
+## 步骤 3. 拉取 SGLang 容器
 
 下载最新的 SGLang 容器。此步骤在主机上运行，​​可能需要
 几分钟，具体取决于您的网络连接。
@@ -124,7 +134,7 @@ docker pull nvcr.io/nvidia/sglang:26.02-py3
 docker images | grep sglang
 ```
 
-## 步骤 3. 启动服务器模式的 SGLang 容器
+## 步骤 4. 启动服务器模式的 SGLang 容器
 
 在服务器模式下启动 SGLang 容器以启用 HTTP API 访问。这运行推理
 服务器位于容器内，将其暴露在端口 30000 上以供客户端连接。
@@ -138,7 +148,7 @@ docker run --gpus all -it --rm \
   bash
 ```
 
-## 步骤 4. 启动 SGLang 推理服务器
+## 步骤 5. 启动 SGLang 推理服务器
 
 在容器内，使用受支持的模型启动 HTTP 推理服务器。这一步运行
 在 Docker 容器内并启动 SGLang 服务器守护进程。
@@ -161,7 +171,7 @@ sleep 30
 curl http://localhost:30000/health
 ```
 
-## 步骤 5. 测试客户端-服务器推理
+## 步骤 6. 测试客户端-服务器推理
 
 从主机系统上的新终端测试 SGLang 服务器 API 以确保其正常工作
 正确。这验证服务器正在接受请求并生成响应。
@@ -179,7 +189,7 @@ curl -X POST http://localhost:30000/generate \
   }'
 ```
 
-## 步骤 6. 测试 Python 客户端 API
+## 步骤 7. 测试 Python 客户端 API
 
 创建一个简单的 Python 脚本来测试对 SGLang 服务器的编程访问。这运行于
 主机系统并演示如何将 SGLang 集成到应用程序中。
@@ -199,7 +209,7 @@ response = requests.post('http://localhost:30000/generate', json={
 print(f"Response: {response.json()['text']}")
 ```
 
-## 步骤 7. 验证安装
+## 步骤 8. 验证安装
 
 确认服务器和离线模式均正常工作。此步骤验证
 完整的 SGLang 设置并确保可靠运行。
@@ -215,7 +225,7 @@ docker ps
 docker logs <CONTAINER_ID>
 ```
 
-## 步骤 8. 清理和回滚
+## 步骤 9. 清理和回滚
 
 停止并删除容器以清理资源。此步骤将您的系统恢复到原来的状态
 原始状态。
@@ -234,7 +244,7 @@ docker container prune -f
 docker rmi nvcr.io/nvidia/sglang:26.02-py3
 ```
 
-## 步骤 9. 后续步骤
+## 步骤 10. 后续步骤
 
 成功部署 SGLang 后，您现在可以：
 
